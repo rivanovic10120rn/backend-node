@@ -30,22 +30,22 @@ function authToken(req, res, next) {
 
 route.get('/missionthreads/', (req, res) => {
 
-    Soldiers.findOne({ where: { id: req.user.userID }})
-        .then( usr => {
-            MissionThreads.findAll({
-                include: ['missionThread', 'sender'],
-                 })
-                .then( rows => res.json(rows) )
-                .catch( err => res.status(500).json(err) );
-        })
-        .catch( err => res.status(500).json(err));
+    // Soldiers.findOne({ where: { id: req.user.userID }})
+    //     .then( usr => {
+    //         MissionThreads.findAll({
+    //             include: ['missionThread', 'sender'],
+    //              })
+    //             .then( rows => res.json(rows) )
+    //             .catch( err => res.status(500).json(err) );
+    //     })
+    //     .catch( err => res.status(500).json(err));
 
-    // MissionThreads.findAll({
-    //     //mozda dodati squad i loadout zbog soldiera?
-    //     include: ['missionThread', 'sender'],
-    //      })
-    //     .then( rows => res.json(rows) )
-    //     .catch( err => res.status(500).json(err) );
+    MissionThreads.findAll({
+        //mozda dodati squad i loadout zbog soldiera?
+        include: ['missionThread', 'sender'],
+         })
+        .then( rows => res.json(rows) )
+        .catch( err => res.status(500).json(err) );
     
 });
 
@@ -71,85 +71,85 @@ route.get('/missionthreads/:id', (req, res) => {
 
 route.get('/missionthreads/soldier/:SoldierID', (req, res) => {
 
-    Soldiers.findOne({ where: { id: req.user.userID }})
-        .then( usr => {
-            MissionThreads.findAll({ where: { SoldierID: req.params.SoldierID },
-                include: ['missionThread', 'sender'],
-                 })
-                .then( rows => res.json(rows) )
-                .catch( err => res.status(500).json(err) );
-        })
-        .catch( err => res.status(500).json(err));
+    // Soldiers.findOne({ where: { id: req.user.userID }})
+    //     .then( usr => {
+    //         MissionThreads.findAll({ where: { SoldierID: req.params.SoldierID },
+    //             include: ['missionThread', 'sender'],
+    //              })
+    //             .then( rows => res.json(rows) )
+    //             .catch( err => res.status(500).json(err) );
+    //     })
+    //     .catch( err => res.status(500).json(err));
 
-    // MissionThreads.findAll({ where: { SoldierID: req.params.SoldierID },
-    //     include: ['missionThread', 'sender'],
-    //      })
-    //     .then( rows => res.json(rows) )
-    //     .catch( err => res.status(500).json(err) );
+    MissionThreads.findAll({ where: { SoldierID: req.params.SoldierID },
+        include: ['missionThread', 'sender'],
+         })
+        .then( rows => res.json(rows) )
+        .catch( err => res.status(500).json(err) );
 
 });
 
 route.get('/missionthreads/mission/:MissionID', (req, res) => {
 
-    Soldiers.findOne({ where: { id: req.user.userID }})
-        .then( usr => {
-            MissionThreads.findAll({ where: { MissionID: req.params.MissionID },
-                include: ['missionThread', 'sender'],
-                 })
-                .then( rows => res.json(rows) )
-                .catch( err => res.status(500).json(err) );
-        })
-        .catch( err => res.status(500).json(err));
+    // Soldiers.findOne({ where: { id: req.user.userID }})
+    //     .then( usr => {
+    //         MissionThreads.findAll({ where: { MissionID: req.params.MissionID },
+    //             include: ['missionThread', 'sender'],
+    //              })
+    //             .then( rows => res.json(rows) )
+    //             .catch( err => res.status(500).json(err) );
+    //     })
+    //     .catch( err => res.status(500).json(err));
 
-    // MissionThreads.findAll({ where: { MissionID: req.params.MissionID },
-    //     include: ['missionThread', 'sender'],
-    //      })
-    //     .then( rows => res.json(rows) )
-    //     .catch( err => res.status(500).json(err) );
+    MissionThreads.findAll({ where: { MissionID: req.params.MissionID },
+        include: ['missionThread', 'sender'],
+         })
+        .then( rows => res.json(rows) )
+        .catch( err => res.status(500).json(err) );
 
 });
 
 route.post('/missionthreads/', (req, res) => {
 
     //skloniti posle
-    route.use(authToken);
+    // route.use(authToken);
 
-    Soldiers.findOne({ where: { id: req.user.userID }})
-        .then( usr => {
-            const validEntry = newMissionThreadMsgValidation.validate(req.body);
+    // Soldiers.findOne({ where: { id: req.user.userID }})
+    //     .then( usr => {
+    //         const validEntry = newMissionThreadMsgValidation.validate(req.body);
   
-            if(validEntry.error){
-                res.status(422).json({ msg: validEntry.error.message })
-            }else{
+    //         if(validEntry.error){
+    //             res.status(422).json({ msg: validEntry.error.message })
+    //         }else{
             
-            MissionThreads.create({ include: ['sender'],
-                message: req.body.message,
-                MissionID: req.body.MissionID, 
-                SoldierID: req.body.SoldierID,
-                recieved: req.body.recieved
-             })
-                .then( rows => res.json(rows) )
-                .catch( err => res.status(500).json(err) );
-            }
-        })
-        .catch( err => res.status(500).json(err));
+    //         MissionThreads.create({ include: ['sender'],
+    //             message: req.body.message,
+    //             MissionID: req.body.MissionID, 
+    //             SoldierID: req.body.SoldierID,
+    //             recieved: req.body.recieved
+    //          })
+    //             .then( rows => res.json(rows) )
+    //             .catch( err => res.status(500).json(err) );
+    //         }
+    //     })
+    //     .catch( err => res.status(500).json(err));
 
-    // const validEntry = newMissionThreadMsgValidation.validate(req.body);
+    const validEntry = newMissionThreadMsgValidation.validate(req.body);
   
-    // if(validEntry.error){
-    //     res.status(422).json({ msg: validEntry.error.message })
-    // }else{
+    if(validEntry.error){
+        res.status(422).json({ msg: validEntry.error.message })
+    }else{
     
-    // MissionThreads.create({ include: ['sender'],
-    //     message: req.body.message,
-    //     // timestamp: req.body.timestamp, 
-    //     MissionID: req.body.MissionID, 
-    //     SoldierID: req.body.SoldierID,
-    //     recieved: req.body.recieved
-    //  })
-    //     .then( rows => res.json(rows) )
-    //     .catch( err => res.status(500).json(err) );
-    // }
+    MissionThreads.create({ include: ['sender'],
+        message: req.body.message,
+        // timestamp: req.body.timestamp, 
+        MissionID: req.body.MissionID, 
+        SoldierID: req.body.SoldierID,
+        recieved: req.body.recieved
+     })
+        .then( rows => res.json(rows) )
+        .catch( err => res.status(500).json(err) );
+    }
 });
 
 route.put('/missionthreads/:id', (req, res) => {
@@ -157,54 +157,54 @@ route.put('/missionthreads/:id', (req, res) => {
     //skloniti posle
     route.use(authToken);
 
-    Soldiers.findOne({ where: { id: req.user.userID }})
-        .then( usr => {
-            const validEntry = updateMissionThreadMsgValidation.validate(req.body);
-  
-            if(validEntry.error){
-                res.status(422).json({ msg: validEntry.error.message })
-            }else{
-            
-            MissionThreads.findOne({ where: { id: req.params.id } })
-                .then( load => {
-                    if(usr.role == "HQ" || usr.role == "Sergeant" || usr.id == load.SoldierID){
-                        load.message = req.body.message;
-                        load.MissionID = req.body.MissionID;
-                        load.SoldierID = req.body.SoldierID;
-                        load.recieved = req.body.recieved;
-            
-                        load.save()
-                            .then( rows => res.json(rows) )
-                            .catch( err => res.status(500).json(err) );
-                    }else{
-                        res.status(403).json({ msg: "ERROR: You have invalid privileges to preform this action"})
-                    }
-                })
-                .catch( err => res.status(500).json(err) );
-            }
-        })
-        .catch( err => res.status(500).json(err));
-
-    // const validEntry = updateMissionThreadMsgValidation.validate(req.body);
-  
-    // if(validEntry.error){
-    //     res.status(422).json({ msg: validEntry.error.message })
-    // }else{
-    
-    // MissionThreads.findOne({ where: { id: req.params.id } })
+    // Soldiers.findOne({ where: { id: req.user.userID }})
     //     .then( usr => {
-    //         usr.message = req.body.message;
-    //         // usr.timestamp = req.body.timestamp;
-    //         usr.MissionID = req.body.MissionID;
-    //         usr.SoldierID = req.body.SoldierID;
-    //         usr.recieved = req.body.recieved;
-
-    //         usr.save()
-    //             .then( rows => res.json(rows) )
+    //         const validEntry = updateMissionThreadMsgValidation.validate(req.body);
+  
+    //         if(validEntry.error){
+    //             res.status(422).json({ msg: validEntry.error.message })
+    //         }else{
+            
+    //         MissionThreads.findOne({ where: { id: req.params.id } })
+    //             .then( load => {
+    //                 if(usr.role == "HQ" || usr.role == "Sergeant" || usr.id == load.SoldierID){
+    //                     load.message = req.body.message;
+    //                     load.MissionID = req.body.MissionID;
+    //                     load.SoldierID = req.body.SoldierID;
+    //                     load.recieved = req.body.recieved;
+            
+    //                     load.save()
+    //                         .then( rows => res.json(rows) )
+    //                         .catch( err => res.status(500).json(err) );
+    //                 }else{
+    //                     res.status(403).json({ msg: "ERROR: You have invalid privileges to preform this action"})
+    //                 }
+    //             })
     //             .catch( err => res.status(500).json(err) );
+    //         }
     //     })
-    //     .catch( err => res.status(500).json(err) );
-    // }
+    //     .catch( err => res.status(500).json(err));
+
+    const validEntry = updateMissionThreadMsgValidation.validate(req.body);
+  
+    if(validEntry.error){
+        res.status(422).json({ msg: validEntry.error.message })
+    }else{
+    
+    MissionThreads.findOne({ where: { id: req.params.id } })
+        .then( usr => {
+            usr.message = req.body.message;
+            // usr.timestamp = req.body.timestamp;
+            usr.MissionID = req.body.MissionID;
+            usr.SoldierID = req.body.SoldierID;
+            usr.recieved = req.body.recieved;
+
+            usr.save()
+                .then( rows => res.json(rows) )
+                .catch( err => res.status(500).json(err) );
+        })
+        .catch( err => res.status(500).json(err) );
+    }
 });
 
 route.delete('/missionthreads/:id', (req, res) => {
